@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>  
+<script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title:{
+		text: "Flixon Rating VS User Ratings, 2018"
+	},	
+	axisY: {
+		title: "Ratings",
+		titleFontColor: "#4F81BC",
+		lineColor: "#4F81BC",
+		labelFontColor: "#4F81BC",
+		tickColor: "#4F81BC"
+	},
+		
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		cursor:"pointer",
+		itemclick: toggleDataSeries
+	},
+	data: [{
+		type: "column",
+		name: "Flixon rating (bn)",
+		legendText: "Flixon rating",
+		showInLegend: true, 
+		dataPoints:[
+			{ label: "Hichki", y: 30 },
+			{ label: "October", y: 50 },
+			{ label: "Baaghi2", y: 50 },
+			{ label: "Raazi", y: 70 },
+			{ label: "Quarib_Quarib_Single", y: 49 }
+			
+		]
+	},
+	{
+		type: "column",	
+		name: "User Ratings",
+		legendText: "User Ratings",
+		axisYType: "secondary",
+		showInLegend: true,
+		dataPoints:[
+			{ label: "Hichki", y: 25 },
+			{ label: "October", y: 45 },
+			{ label: "Baaghi2", y: 60 },
+			{ label: "Raazi", y: 66 },
+			{ label: "Quarib_Quarib_Single", y: 45 }
+		
+		]
+	}]
+});
+chart.render();
+
+function toggleDataSeries(e) {
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	}
+	else {
+		e.dataSeries.visible = true;
+	}
+	chart.render();
+}
+
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

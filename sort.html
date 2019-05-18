@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Flixon</title>
+  <!-- Added by Shubhi -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Added by Shubhi -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+ <!--  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'> -->
+  <!-- Added by Shubhi -->
+  <script src="jquery.min.js"></script>
+        <script src='jquery-paginate.min.js'></script>
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Added by Shubhi -->
+
+ <link rel="stylesheet" href="music.css">
+</head>
+
+<body id="mainbody">
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover({placement : "top"});   
+});
+</script>
+<script>
+function getSong(i) {
+    var table = document.getElementById("myPlaylist");
+    var row = table.insertRow(i);
+    row.innerHTML= document.getElementById("myTable").rows[i].innerHTML;
+}
+</script>
+<script>
+function myFunction() {
+  // Declare variables 
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+}
+</script>
+<script>
+function sortTableAscRating(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("myTable");
+  switching = true;
+  dir = "asc"; 
+  while (switching) {
+    switching = false;
+    rows = table.getElementsByTagName("tr");
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("span")[n];
+      y = rows[i + 1].getElementsByTagName("span")[n];
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++; 
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+<script>
+function sortTableDescRating(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("myTable");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "desc"; 
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("tr");
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("span")[n];
+      y = rows[i + 1].getElementsByTagName("span")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      /*if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }*/
+      if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++; 
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+
+<script>
+function sortTableAsc(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("myTable");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "asc"; 
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("tr");
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("td")[n];
+      y = rows[i + 1].getElementsByTagName("td")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }/* else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }*/
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++; 
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+<script>
+function sortTableDesc(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("myTable");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "desc"; 
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("tr");
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("td")[n];
+      y = rows[i + 1].getElementsByTagName("td")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      /*if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }*/
+      if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++; 
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+
+ <nav class="navbar navbar-expand-sm background-color ">
+        <a class="navbar-brand" href="index.html" ><h1 style="color:red;"><b>Flixon</b></h1></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="Movie.html" data-toggle="tooltip" title="Movies">&nbsp&nbsp&nbsp<img src="Icons/Movies.png" alt="Movies"style="width:30px;height:30px;"> &nbsp&nbsp&nbsp</a>
+                    <h6 style="color:white; font-size:80%" >&nbsp;&nbsp;&nbsp;&nbsp;Movies</h6>
+                    <ul class ="dropdown">
+                      <li><a class="dropdown-item" href="Movie.html" >List Of Movies</a></li>
+                      <li><a class="dropdown-item" target="_blank" href="Chart Bar.html">Flixon VS User Ratings</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="Games/Index.html" data-toggle="tooltip" title="Games">&nbsp&nbsp&nbsp<img src="Icons/Games.png" alt="Games"style="width:30px;height:30px;"> &nbsp&nbsp&nbsp</a>
+                    <h6 style="color:white; font-size:80%">&nbsp;&nbsp;&nbsp;&nbsp;Games</h6>
+                  </li>
+                
+                 <li class="nav-item active">
+                    <a class="nav-link" href="Music.html" data-toggle="tooltip" title="Music">&nbsp&nbsp&nbsp<img src="Icons/Music.png" alt="Music"style="width:30px;height:30px;"> &nbsp&nbsp&nbsp</a>
+                    <h6 style="color:white; font-size:80%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Music</h6>
+                    <ul class ="dropdown">
+                    <li><a target="_self" href="sort.html" class="dropdown-item">Sort Songs by Name & Rating</a></li>
+                    <!-- <li><a target="_self" href="sortRating.html">Sort Songs by Rating</a></li> -->
+                    <li><a target="_self" href="UpcomingEvents.html" class="dropdown-item">Upcoming Music Events</a></li>
+                </ul>
+                  </li>
+            </ul>
+            <!-- <form class="form-inline my-2 my-lg-0">
+              <button type="button"  onclick="openLoginWin()" style="align:right;" "margin-right: 10px;" "background-color: white;" "color: black; " data-toggle="tooltip" title="Login"><img src="Icons/Login.png" alt="Login"style="width:30px;height:30px;"><h6 style="color:black; font-size:80%" >Login</h6></button>
+              &nbsp;&nbsp;&nbsp;
+              <button type="button" onclick="openSignUpWin()" data-toggle="tooltip" title="Sign Up" ><img src="Icons/Signup.png" alt="Sign Up"style="width:30px;height:30px;"><h6 style="color:black; font-size:80%" >Sign Up</h6></button>
+            </form> -->
+        </div>
+    </nav>
+              <!-- Added by shubhi-->
+              <!-- <div class="container-fluid">
+                <img src="Images/sort.jpg" style="width: 100%; height: 100%;" alt="Sign Up">
+              </div> -->
+              <div class="container">
+                <br>
+                  <h3>New Music Releases in 2018</h3>
+                  <br>
+                  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for songs.."> &nbsp;&nbsp;
+                  <button type="button" onclick="sortTableAsc(1)">Sort by Name Asc</button>
+                  <button type="button" onclick="sortTableDesc(1)">Sort by Name Desc</button>
+                  <button type="button" onclick="sortTableAscRating(3)">Sort by Rating Desc</button>
+                  <button type="button" onclick="sortTableDescRating(3)">Sort by Rating Asc</button>
+                  <div class="table-responsive">
+                  <table id="myTable">
+                    <col style="width:5%">
+                    <col style="width:25%">
+                    <col style="width:60%">
+                    <col style="width:10%">
+                    <!-- <col style="width:15%"> -->
+                    <tr>
+                      <th><img id="musicicon" src="Icons/musicicon.png"></th>
+                      <th>Songs</th>
+                      <th>Play & Download</th>
+                      <th>Ratings</th>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Sanu ek pal chain</td>
+                      <td> <audio controls>
+                          <source src="https://downpwnew.com/14050/01%20Sanu%20Ek%20Pal%20Chain%20-%20Raid%20190Kbps.mp3" /> 
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id01').style.display='block'" data-toggle="tooltip" title="Details">Details</button>&nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id04').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                     &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/10014/Sanu%20Ik%20Pal%20Chain%20-%20Siddharth%20Slathia.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Sanu ek pal chain from Movie Raid"
+                     title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+                   </a></span>
+                    </td>
+                    <td>
+                     <span class="rating" data-default-rating="3.5"></span>
+                   </td>
+                      <!-- <td>Maria Anders</td> -->
+                      <!-- <td>Germany</td> -->
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Dil diyan gallan </td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/12831/02%20Dil%20Diyan%20Gallan%20-%20Tiger%20Zinda%20Hai%20(Atif)%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id02').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id05').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                     &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<http://www.music-punjab.com/uploads/files/Dil-Diyan-Gallan-(Tiger-Zinda-Hai)/Dil_Diyan_Gallan-(Music-punjab_com)_3.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Dil diyan gallan from Movie Tiger Zinda Hai" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                   </td>
+                   <td>
+                   <span class="rating" data-default-rating="4.5"></span>
+                   </td>
+                      <!-- <td>Francisco Chang</td> -->
+                      <!-- <td>Mexico</td> -->
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Aaj se teri </td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/12964/01%20Aaj%20Se%20Teri%20-%20Padman%20(Arijit%20Singh)%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id03').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id06').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                     &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://smp3load.com/fileDownload/Songs/0/30591.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Aaj se teri from Movie Padman"
+            title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                   </td>
+                   <td>
+                   <span class="rating" data-default-rating="3.0"></span>
+                    </td>
+                      <!-- <td>Roland Mendel</td> -->
+                      <!-- <td>Austria</td> -->
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Nachle Na </td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/13041/Nachle%20Na%20-%20Guru%20Randhawa%20320Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id07').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id08').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                     &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/13041/Nachle%20Na%20-%20Guru%20Randhawa%20320Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Nachle Na from Movie Dil Juunglee"
+            title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                     <span class="rating" data-default-rating="3.5"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Chhote Chhote Peg </td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/13041/Chhote%20Chhote%20Peg%20-%20Sonu%20Ke%20Titu%20Ki%20Sweety%20320Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id09').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id10').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/13041/Chhote%20Chhote%20Peg%20-%20Sonu%20Ke%20Titu%20Ki%20Sweety%20320Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Chhote Chhote Peg from Movie Sonu Ke Titu Ki Sweety"
+            title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                      <span class="rating" data-default-rating="4.0"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Meri Khamoshi Hai </td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/14097/01%20Meri%20Khamoshi%20Hai%20-%20Pari%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id11').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id12').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/14097/01%20Meri%20Khamoshi%20Hai%20-%20Pari%20190Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Meri Khamoshi Hai from Movie Pari"
+            title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                    <span class="rating" data-default-rating="4.5"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Mundiyan</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/14088/01%20Mundiyan%20-%20Baaghi%202%20-%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id13').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id14').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/14088/01%20Mundiyan%20-%20Baaghi%202%20-%20190Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Mundiyan from Movie Mundiyan"
+              title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                    <span class="rating" data-default-rating="3.0"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Patola</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/14084/02%20Patola%20-%20Blackmail%20-%20Guru%20Randhawa%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id15').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id16').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/14084/02%20Patola%20-%20Blackmail%20-%20Guru%20Randhawa%20190Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Patola from Movie Blackmail" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                      </td>
+                      <td>
+                      <span class="rating" data-default-rating="3.5"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Boond Boond</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/13100/02%20Boond%20Boond%20-%20Hate%20Story%204%20-%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id17').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id18').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/13100/02%20Boond%20Boond%20-%20Hate%20Story%204%20-%20190Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Boond Boond from Movie Hate Story 4" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                      <span class="rating" data-default-rating="4.0"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Sehmi Hai Dhadkan</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/14078/variation/190K/01%20Sehmi%20Hai%20Dhadkan%20-%20Atif%20Aslam.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id19').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id20').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/14078/variation/190K/01%20Sehmi%20Hai%20Dhadkan%20-%20Atif%20Aslam.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Sehmi Hai Dhadkan from Movie Daas Dev" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                    <span class="rating" data-default-rating="3.0"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Ghoomar</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/13074/01%20Ghoomar%20-%20Padmaavat%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id21').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id22').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/13074/01%20Ghoomar%20-%20Padmaavat%20190Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Ghoomar from Movie Padmavat" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                      <span class="rating" data-default-rating="4.5"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Na Kasoor</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/14048/05%20Na%20Kasoor%20-%20Veerey%20Ki%20Wedding%20320Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id23').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id24').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/14048/05%20Na%20Kasoor%20-%20Veerey%20Ki%20Wedding%20320Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Na Kasoor from Movie Veerey Ki Wedding" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                    <span class="rating" data-default-rating="3.5"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Smiley Song</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/13094/05%20Smiley%20Song%20-%20Welcome%20To%20New%20York%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id25').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id26').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://downpwnew.com/13094/05%20Smiley%20Song%20-%20Welcome%20To%20New%20York%20190Kbps.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Smiley Song from Movie Welcome To New York" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                    <span class="rating" data-default-rating="3.0"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Yaad Hai</td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/13003/02%20Yaad%20Hai%20-%20Aiyaary%20(Ankit%20Tiwari)%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id27').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id28').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://smp3load.com/fileDownload/Songs/0/30816.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Yaad Hai from Movie Aiyaary" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                      <span class="rating" data-default-rating="4.7"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                      <td><img id="musicicon" src="Icons/musicicon.png"></td>
+                      <td>Tere Bina </td>
+                      <td><audio controls>
+                          <source src="https://downpwnew.com/12949/04%20Tere%20Bina%20-%201921%20(Arijit%20Singh)%20190Kbps.mp3" />
+                     </audio> &nbsp;&nbsp;&nbsp; <button type="button" onclick="document.getElementById('id29').style.display='block'" data-toggle="tooltip" title="Details">Details</button>
+                     &nbsp;&nbsp;&nbsp;
+                     <button type="button" onclick="document.getElementById('id30').style.display='block'" data-toggle="tooltip" title="Lyrics">Lyrics</button>
+                      &nbsp;&nbsp;<span><a target="_blank" href="https://web.whatsapp.com/send?text=<<https://smp3load.com/fileDownload/Songs/0/30613.mp3>>" data-action="share/whatsapp/share" title="Share by whatsapp"><img id="emailIcon" src="https://findicons.com/files/icons/2788/circle/128/whatsapp.png"></a></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="mailto:?subject=Please listen to this awesome song.&amp;body=Check out this song Tere Bina from Movie 1921" title="Share by Email"><img id="emailIcon" src="https://findicons.com/files/icons/42/basic/64/letter.png">
+          </a></span>
+                    </td>
+                    <td>
+                    <span class="rating" data-default-rating="3.8"></span>
+                    </td>
+                    </tr>
+                  </table>
+                </div>
+                  <table id="myPlaylist">
+                      <col style="width:5%">
+                    <col style="width:25%">
+                    <col style="width:75%">
+                  </table>
+              </div>  
+
+              <div id="id01" class="modal">
+              <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id01').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img src="Images/RaidSong.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Raid (2018)</h4>
+                <h4>File Size:    2.39 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Rahat Fateh Ali Khan</h4>
+                <h4>Lyrics By:    Manoj Muntashi</h4>
+                <h4>Music By:     Tanishk Bagchi</h4>
+                <h4>Music Label:  T-Series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id04" class="modal">
+              <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id04').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/RaidSong.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Sanu ek pal chain</h3> -->
+              <p> Sanu ek pal chain na aave
+                  Sanu ek pal chain na aave
+                  Sajna tere bina
+                  Sajna tere bina
+
+
+                  Dil jaane kyun ghabraave
+                  Dil jaane kyun ghabraave
+                  Sajna tere bina
+                  Sajna tere bina
+
+                  Sanu ik pal chain na aave
+                  Sanu ik pal chain na aave
+                  Sajna tere bina
+                  Sajna tere bina !!
+                  </p>
+                  <p>
+                  Ye din hain pyaare heeriye
+                  Jo saath mein humne jee liye
+                  Jaana nahin munh mod ke
+                  Akhiyon mein paani chhod ke
+
+                  Ye paani aag lagaave
+                  Ye paani aag lagaave
+                  Sajna tere bina
+                  Sajna tere bina !!
+
+                  Sanu ik pal chain na aave
+                  Sanu ik pal chain na aave
+                  Sajna tere bina
+                  Sajna tere bina !!
+                </p>
+                <p>
+                  Tera khayal har ghadi
+                  Hai aadatein mujhe teri
+                  Ik din jo tujhse naa milun
+                  Paagal ke jaisa main phirun
+
+                  Koi rut na mujhko bhaave
+                  Koi rut na mujhko bhaave
+                  Sajna tere bina !!
+                  Sajna tere bina !!
+
+                  Sanu ek pal chain na aave
+                  Sanu ek pal chain na aave
+                  Sajna tere bina !!
+                  Sajna tere bina !!
+                </p>
+                  Sajna re... tere bina...
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id02" class="modal">
+              <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id02').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/TzhSong.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Tiger Zinda Hai (2017)</h4>
+                <h4>File Size:    5.90 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Atif Aslam</h4>
+                <h4>Lyrics By:    Irshad Kamil</h4>
+                <h4>Music By:     Vishal & Shekhar</h4>
+                <h4>Music Label:  Yash Raj Films Music</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id05" class="modal">
+              <span onclick="document.getElementById('id05').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id05').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/TzhSong.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Dil diyan gallan</h3> -->
+              <p> Kacchi doriyon, doriyon, doriyon se
+                  Mainu tu baandh le
+                  Pakki yaariyon, yaariyon, yaariyon mein
+                  Honde na faasley!!
+
+                  Eh naraazgi kaagzi saari teri
+                  Mere sohneya sunn le meri
+                  Dil diyan gallan
+                  Karaange naal naal beh ke
+                  Akh naal akh nu milaa ke!!
+
+                  Dil diyan gallan haaye…
+                  Karaange roz roz beh ke
+                  Sacchiyan mohabbataan nibha ke!!
+
+                  Sataaye mainu kyun
+                  Dikhaaye mainu kyun
+                  Aiven jhuthi mutthi russ ke rusaake
+                  Dil diyan gallan haaye
+                  Karaange naal naal beh ke
+                  Akh naal akh nu mila ke!!
+                </p>
+                <p>
+                  Tenu lakhan ton chhupa ke rakhaan
+                  Akkhaan te sajaa ke tu ae meri wafaa
+                  Rakh apna bana ke
+                  Main tere layi aan
+                  Tere layi aan yaaran
+                  Naa paavin kade dooriyan (x2)
+
+                  Main jeena haan tera…
+                  Main jeena haan tera
+                  Tu jeena hai mera
+                  Dass lena ki nakhra dikha ke!!
+
+                  Dil diyan gallan
+                  Karaange naal naal beh ke
+                  Akh naal akh nu mila ke!!
+
+                  Dil diyan gallan…!!
+                </p>
+                <p>
+                  Raatan kaaliyan, kaaliyan, kaaliyan ne
+                  Mere din saanwale
+                  Mere haaniyan, haaniyan, haaniyan je
+                  Lagge tu na gale!!
+
+                  Mera aasmaan mausamaan di na sune
+                  Koi khwaab na poora bane
+                  Dil diyan gallan
+                  Karange naal naal beh ke
+                  Akh naal akh nu mila ke!!
+
+                  Pataa hai mainu kyun chupa ke dekhe tu
+                  Mere naam se naam mila ke
+                  Dil diyan gallan
+                  Karange naal naal beh ke
+                  Akh naal akh nu mila ke!!
+                  </p>
+                  Dil diyan gallan…!!
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id03" class="modal">
+              <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id03').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/PadmanSong.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Padman (2018)</h4>
+                <h4>File Size:    12.57 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Arijit Singh</h4>
+                <h4>Lyrics By:    Kausar Munir</h4>
+                <h4>Music By:     Amit Trivedi</h4>
+                <h4>Music Label:  Zee Music Company</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id06" class="modal">
+              <span onclick="document.getElementById('id06').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id06').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/PadmanSong.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                  Aaj se teri saari galiyan meri ho gayi
+                  Aaj se mera ghar tera ho gaya (x2)
+
+                  Aaj se meri saari khushiyan teri ho gayi
+                  Aaj se tera gham mera ho gaya!!
+
+                  O tere kaandhe ka jo til hai
+                  O tere seene mein jo dil hai
+                  O teri bijli ka jo bill hai
+                  Aaj se mera ho gaya!!
+
+                  O mere khwabon ka ambar
+                  O meri khushiyon ka samandar
+                  O mere pin code ka number
+                  Aaj se tera ho gaya!!
+                </p>
+                <p>
+                  Tere maathe…
+                  Tere maathe ke kumkum ko
+                  Main tilak laga ke ghoomuga
+                  Teri baali ki chhun chhun ko
+                  Main dil se laga ke jhoomunga!!
+
+                  Meri choti si bhulon
+                  Ko tu nadiya mein baha dena
+                  Tere joode ke phoolon ko
+                  Main apni shirt mein pehnunga!!
+
+                  Bas mere liye tu maalpuve
+                  Kabhi kabhi bana dena!!
+
+                  Aaj se meri saari ratiyan teri ho gayi
+                  Aaj se tera din mera ho gaya!!
+
+                  O tere kaandhe ka jo til hai
+                  O tere seene mein jo dil hai
+                  O teri bijli ka jo bill hai
+                  Aaj se mera ho gaya!!
+
+                  O mere khwabon ka ambar
+                  O meri khushiyon ka samandar
+                  O mere pin code ka number
+                  Aaj se tera ho gaya…!!
+                </p>
+                <p>
+                  Tu maange sardi mein amiya
+                  Jo maange garmi mein mungfaliya
+                  Tu barish mein agar kehde
+                  Ja mere liye tu dhoop khila
+                  Toh main sooraj…
+                  Toh main sooraj ko jhatak dunga
+                  Toh main saawan ko gatak lunga
+                  To saare taaron sang chanda
+                  Main teri god mein rakh dunga!!
+
+                  Bas mere liye tu
+                  Khill ke kabhi muskura dena!!
+
+                  Aaj se meri saari sadiyan teri ho gayi
+                  Aaj se tera pal mera ho gaya!!
+
+                  O tere kaandhe ka jo til hai
+                  O tere seene mein jo dil hai
+                  O teri bijli ka jo bill hai
+                  Aaj se mera ho gaya!!
+
+                  O mere khwabon ka ambar
+                  O meri khushiyon ka samandar
+                  O mere pin code ka number
+                  Aaj se… tera ho gaya…!!
+                </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+              <div id="id07" class="modal">
+              <span onclick="document.getElementById('id07').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id07').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/dil-juungleeSong.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Dil Juunglee (2018)</h4>
+                <h4>File Size:    4.87 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Guru Randhawa, Neeti Mohan</h4>
+                <h4>Lyrics By:    Guru Randhawa</h4>
+                <h4>Music By:     Guru Randhawa and Rajat Nagpal</h4>
+                <h4>Music Label:  T-series/</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id08" class="modal">
+              <span onclick="document.getElementById('id08').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id08').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images\dil-juungleeSong.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Aam brown tere baalan da color soniye
+                Hawa vich jande ne khiller soniye!!
+
+                Aam brown tere baalan da color soniye
+                Hawa vich jande ne khiller soniye!!
+
+                Chadh gayi tu jese haye miller soniye
+                Please mainu takk le na!!
+
+                Aa soni kudi tu nachle na
+                Aa baby meri nachle na
+                Aa mere naal nachle na (x2)
+              </p>
+              <p>
+                Slowly slowly pee soniye
+                Ho jayengi talli
+                Shots laga ke hot tu lagdi
+                Dekh ke dil hua junglee!!
+
+                Aa naughty naughty maardi ae akh soniye
+                Saareya nu peh geya shaq soniye!!
+
+                Aa naughty naughty maardi ae akh soniye
+                Saareya nu peh gaya shaq soniye
+                Haan de aa mundeya ton bach soniye..
+                Tennu koi chakk le na!!
+
+                Aa sohni kudi nachle na
+                Aa baby meri nach le na
+                Aa mere naal nach le na (x2)
+              </p>
+              <p>
+                Unchi meri heal soniya
+                Tik tok kardi jaave
+                Lakha da perfume haaye mera
+                Mundeya nu tadpave!!
+
+                Haaye julfan de tere haaye ny puff soniye
+                Mundeya ne laa ne len kash soniye!!
+
+                Aa tod ditte bottalan de kanch soniye
+                Nazar bhar takk le na!!
+
+                Aa sohni kudi nach lena
+                Aa baby meri nach lena
+                Aa mere naal nach lena (x2)
+
+                Nazar bhar takk laangi
+                Aa dil tera rakh laangi
+                Main tere naal nach laangi!!
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+              <div id="id09" class="modal">
+              <span onclick="document.getElementById('id09').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id09').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/sonuSong.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Sonu Ke Titu Ki Sweety (2018)</h4>
+                <h4>File Size:    4.48 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Yo Yo Honey Singh and Neha Kakkar</h4>
+                <h4>Lyrics By:    Yo Yo Honey Singh</h4>
+                <h4>Music By:     Yo Yo Honey Singh</h4>
+                <h4>Music Label:  Zee Music Company</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id10" class="modal">
+              <span onclick="document.getElementById('id10').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id10').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/sonuSong.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Pila de, pila de
+                Pila de pila de!!
+
+                Pila de dewaani main hoon jiski
+                I’m a bad girl
+                I like whiskey (x2)
+
+                Jab mujhko chadh jaati toh
+                Nashe mein ho jaati main risky!!
+              </p>
+              <p>
+                Pila de dewaani main hoon jiski
+                I’m a bad girl
+                I like whiskey!!
+
+                Oo chal kudiye ni chal ho tayyar
+                Desi daru English bar
+                Chal kudiye ni chal ho tayyar
+                Desi daru English bar!!
+
+                Chote Chote peg maar
+                Baby Chote Chote peg maar
+                Chote Chote peg maar
+                Baby Chote..!!
+
+                Put your hands up!
+              </p>
+              <p>
+                Pee gayi bottal khade khade
+                Scene tera mere sar se pare
+                Pata hai mujhe tujhe hoga hangover
+                Tabhi pehle se hi nimbu meri jeb mein pade!!
+
+                Ek peg mein, tujhe pataya
+                Tujhe patane ka jokhim uthaya
+                Par kadwi lagegi par sach hai ye baat
+                Tujhe ghar hona chahiye barbie doll ke saath!!
+
+                Ye gaana ho gaya hai A-rated version
+                Bottalein peeli hai tune aadha darjan
+                Kya karna hai ab sober jeeke
+                Daaru peena koi tujhse seekhe!!
+              </p>
+              <p>
+                Paradise mein jaane ka ek hi route hai
+                Pet bhar ke peelo kyunki 5 rupay ki chhoot hai!!
+
+                Pila de dewaani main hoon jiski
+                I’m a bad girl
+                I like whiskey!!
+
+                Jab mujhko chadh jaati toh
+                Nashe mein ho jaati main risky!!
+
+                Pila de dewaani main hoon jiski
+                I’m a bad girl
+                I like whiskey!!
+
+                Sabse zyada chamak rahi hai
+                Tu chamak rahi hai iss party mein
+                Main tere naino mein doob raha
+                Tu doob rahi hai Bacardi mein!!
+              </p>
+              <p>
+                Akele peene wali raat nahi hai
+                Maine dekh liya koi tere saath nahi hai
+                Aur bhi ladkiyaan hain yahaan magar
+                Tere jaisi kisi mein bhi baat nahi hain
+                Itni der se baitha
+                Bas mind main tera padh raha hoon
+                Tujhe chahiye daaru desi
+                Tabhi toh convince mein kar raha hoon, kya?!!
+
+                Chal chal chal..
+                Oo chal kudiye ni chal ho tayyar
+                Desi daaru English bar
+                Chal kudiye ni chal ho tayyar
+                Desi daaru English bar!!
+
+                Chote chote peg maar
+                Baby chote chote peg maar
+                Chote chote peg maar
+                Baby chote…!!
+
+                Yo Yo Honey Singh!
+
+                Put your hands up!
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id11" class="modal">
+              <span onclick="document.getElementById('id11').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id11').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/pari.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Pari (2018)</h4>
+                <h4>File Size:    13.21 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Ishan Mitra</h4>
+                <h4>Lyrics By:    Anvita Dutt</h4>
+                <h4>Music By:     Anupam Roy</h4>
+                <h4>Music Label:  Zee Music Company</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id12" class="modal">
+              <span onclick="document.getElementById('id12').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id12').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/pari.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Tere hi zikr ki jasoosi
+                Meri khamoshi hai
+                Rahoon main chup kyun
+                Baatooni meri khamoshi hai!!
+
+                Jalte bujhte harf hai jo
+                Hothon pe ye barf kyun ho
+                Inn sawaalon ka tu jawaab hai
+                Sun zara…!!
+
+                Tere hi zikr ki jasoosi
+                Meri khamoshi hai
+                Rahoon main chup kyun
+                Baatooni meri khamoshi hai!!
+              </p>
+              <p>
+                Dil tera chakore sa bhaga kyun hai
+                Chand bagal mein tera
+                Kandhon pe ye khwab aisa ladaa kyun
+                Takiye pe rakh toh zara!!
+
+                Chhupe hain jo dil ke
+                Suraag dikha doon tujhe!!
+
+                Tere hi zikr ki jasoosi
+                Meri khamoshi hai
+                Rahoon main chup kyun
+                Baatooni meri khamoshi hai!!
+
+                Dil ke bichhaune jo thhe kore kore
+                Rang se khilne lage
+                Khwab ke bageeche dhaaga dhaaga chune
+                Fursat se silne lage!!
+              </p>
+              <p>
+                Kahaan se ye seekha
+                Hunar bata dil mere…!!
+
+                Tere hi zikr ki jasoosi
+                Meri khamoshi hai
+                Rahoon main chup kyun
+                Baatooni meri khamoshi hai!!
+
+                Jalte bujhte harf hain jo
+                Hothon pe ye barf kyun ho’n
+                Inn sawaalon ka tu jawaab hai
+                Sun zara…!!
+
+                Tere hi zikr ki jasoosi
+                Meri khamoshi hai
+                Rahoon main chup kyun
+                Baatooni meri khamoshi hai!!
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id13" class="modal">
+              <span onclick="document.getElementById('id13').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id13').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/baaghi2.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Mundiyan (2018)</h4>
+                <h4>File Size:    4.88 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Navraj Hans & Palak Muchhal</h4>
+                <h4>Lyrics By:    Ginny Diwan</h4>
+                <h4>Music By:     Sandeep Shirodkar</h4>
+                <h4>Music Label:  T-Series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id14" class="modal">
+              <span onclick="document.getElementById('id14').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id14').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/baaghi2.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Bach ke…
+                Bach ke…
+
+                Ho niwi niwi aankhon ko jhuka ke rakh le
+                Gore gore gaalon ko chupa ke rakh le
+                Bach ke… Bach ke…!!
+
+                O niwi niwi aankhon ko jhuka ke rakh le
+                Gore gore gaalon chupa ke rakh le!!
+
+                Aivein kari na ki
+                Aivein kari na ki
+                O aivein kari na kisey de naal pyar
+                O mundiyan ton bach ke rahi
+                Ni tu hunne hunne hoyi mutiyaar
+                Mundiyan ton bach ke rahi
+                Ni tu hunne hunne hoyi mutiyaar
+                Mundiyan ton bach ke rahi oye!!
+              </p>
+              <p>
+                Nakhra vilaiti mera swag karara
+                Meri hi jawani ne to sab sar dala
+                Hot n cool sada mood mera
+                Mundian ki toli confuse zara!!
+
+                O mundian ton bach ke rahi oye!!
+
+                Mera kya kasoor jo nasheele nain ho gaye
+                Bhul ke adab ye rangeele nain ho gaye!!
+
+                Aaye haye..!
+                Mera kya kasoor jo nasheele nain ho gaye
+                Bhul ke adab ye rangeele nain ho gaye!!
+
+                Sambhli na jaye aisi tod jawani
+                Sambhli na jaye aisi tod jawani
+               </p>
+               <p>
+                Aaja dede mujhe
+                Aaja dede mujhe
+                O aaja dede mujhe thodi si udhaar
+
+                Mundeyan ton bachke
+                Mundeyan ton bach ke rahi..
+                Mundeyan ton bachke rahi bachke rahi
+                Mundiyan ton bach ke rahin
+                Mundiyan ton bachke bachke
+                Mundeyan ton bach ke rahi
+                Mundiyan ton bach ke rahi…Oye!
+
+                Aivein kari na kisey de naal pyar
+                Mundiyan ton bach ke rahi
+                Ni tu hunne hunne hoyi mutiyaar
+                Mundiyan ton bach ke rahi
+                Ni tu hunne hunne hoyi mutiyaar
+                Mundiyan ton bach ke rahi oye!!
+                </p>
+                <p>
+                Mundeyon ke lab pe hai meri ye kahaniyan
+                Dil ki ye galiyon mein meri hi dishariya!!
+
+                Haan haan…
+                Mundeyon ke lab pe hai meri ye kahaniyan
+                Dil ki ye galiyon mein meri hi nishaniyan!!
+
+                Ho gora gora rang teri moron jaisi taur
+                Gora gora rang teri moron jaisi taur
+                Naa hi tere jaisi, Naa hi tere jaisi
+                Naa hi tere jaisi sohni koi naar!!
+
+                O mundiyan ton bach ke rahi
+                Ni tu hunne hunne hoyi mutiyaar
+                Mundiyan ton bach ke rahi
+                Ni tu hunne hunne hoyi mutiyaar
+                Mundiyan ton bach ke rahi oye…!!
+                </p>
+                <p>
+                Aaja oye!
+
+                Bach ke, Bach ke
+
+                Bach ke, Bach ke
+                Mundiyan ton bach ke rahi
+                Oye bachke..
+                O bach ke, Bach ke…
+                Mundiyan ton bach ke rahi
+                O bach ke rahin!!
+
+                Bach ke, Bach ke…
+                Mundeyan ton bach ke rahi
+                (Bachke, bachke…)
+                O bach ke, bach ke…
+                Mundeyan ton bach ke rahi!!
+
+                O bach ke rahi…
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id15" class="modal">
+              <span onclick="document.getElementById('id15').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id15').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/blackmail.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Blackmail (2018)</h4>
+                <h4>File Size:    4.03 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Guru Randhawa</h4>
+                <h4>Lyrics By:    Guru Randhawa</h4>
+                <h4>Music By:     Guru Randhawa</h4>
+                <h4>Music Label:  T-series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id16" class="modal">
+              <span onclick="document.getElementById('id16').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id16').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images\blackmail.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Ni mitran di jaan te bane
+                Jadon nikle haaye ni jadon nikle
+                Mittran di jaan te bane…!!
+
+                Chadhdi jawaani tera gora gora rang ni
+                Gora gora rang kare mundeyan nu tang ni
+                Gore hathan vich, ni gore hathan vich
+                Gore hathan vich laal chuda chhanke
+                Ve mundeyan di jaan te bane!!
+
+                Jadon nikle haaye ni jadon nikle
+                Jadon nikle Patola banke
+                Mundeyan di jaan te bane
+                Jadon nikle patola banke
+                Mundeyan di jaan te bane!!
+              </p>
+              <p>
+                Kaala suit kaala til mukhde te jachda
+                Nazar na lage tenu bachake baby rakhda (x2)
+
+                Ishaare karde, Ishare karde
+                Ishaare karde ne munde darr darr ke
+                Mundeyan di jaan te bane!!
+
+                Jadon nikle haaye ni jadon nikle
+                Jadon nikle Patola banke
+                Mundeyan di jaan te bane
+                Jadon nikle patola banke
+                Mundeyan di jaan te bane!!
+
+                Akhan hi akhan ‘ch pyar tere naal pa leya
+                Gallan gallan vich tenu apni bana leya
+                Supne de vich haye main vyah karwa leya
+                Haan karwa leya vyah karwa leya (x2)
+              </p>
+              <p>
+                Roz pichhe pichhe ni roz pichhe pichhe
+                Daily pichhe pichhe aavan tere chal ke!!
+
+                Mundeyan di jaan te bane
+                Jadon nikle haaye ni jadon nikle
+                Jadon nikle Patola banke
+                Mundeyan di jaan te bane
+                Jadon nikle patola banke
+                Mundeyan di jaan te bane!!
+
+                Ni mitran di jaan te bane
+                Jadon nikle haaye ni jadon nikle
+                Mitran di jaan te bane (x2)
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id17" class="modal">
+              <span onclick="document.getElementById('id17').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id17').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/hatestory4.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Hate Story 4 (2018) </h4>
+                <h4>File Size:    6.15 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Jubin Nautiyal & Neeti Mohan</h4>
+                <h4>Lyrics By:    Manoj Muntashir & Sanjay Gupta</h4>
+                <h4>Music By:     Arko</h4>
+                <h4>Music Label:  T-series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id18" class="modal">
+              <span onclick="document.getElementById('id18').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id18').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/hatestory4.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+              Boond boond mein
+              Gum sa hai
+              Ye saavan bhi toh
+              Tum sa hai (x2)
+
+              Ik ajnabi ehsaas hai
+              Kuch hai naya
+              Kuch khaas hai
+              Kusoor ye saara
+              Mausam ka hai!!
+
+              Boond boond mein
+              Gum sa hai
+              Ye saavan bhi toh
+              Tum sa hai!!
+            </p>
+            <p>
+              Chalne do manmarziyan
+              Hone do gustakhiyan
+              Phir kahan ye fursatein
+              Phir kahan nazdeekiyan!!
+
+              Keh do tum bhi kahin
+              Laapata to nahin
+              Dil tumhara bhi kuch
+              Chahata toh nahin!!
+
+              Boond boond mein
+              Gum sa hai
+              Ye saavan bhi toh
+              Tum sa hai!!
+              </p>
+              <p>
+              Ik ajnabi ehsaas hai
+              Kuch hai naya
+              Kuch khaas hai
+              Kusoor ye saara
+              Mausam ka hai!!
+
+              Boond boond mein
+              Gum sa hai
+              Ye saavan bhi toh
+              Tum sa hai!!
+
+              Sirf ik mere siwaa
+              Or kuch na dekh tu
+              Khwaishon ke shehed mein
+              Ik main hoon ik tu
+              Tujhko aana hai toh
+              Ban ke tu saans aa
+              Na rahe dooriyan
+              Iss kadar paas aa!!
+              </p>
+              <p>
+              Boond boond mein
+              Gum sa hai
+              Ye saavan bhi toh
+              Tum sa hai!!
+
+              Bas ye izazat de mujhe
+              Jee bhar ke main pee loon tujhe
+              Main pyas hoon or tu shabnam sa hai
+
+              Boond boond mein
+              (Boond Boond mein..)
+              Gum sa hai
+              Ye saavan bhi toh
+              (saavan bhi toh..)
+              Tum sa hai!!
+         </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id19" class="modal">
+              <span onclick="document.getElementById('id19').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id19').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/daasdev.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Daas Dev (2018)</h4>
+                <h4>File Size:    9.73 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:      Atif Aslam</h4>
+                <h4>Lyrics By:    Dr.Sagar</h4>
+                <h4>Music By:     Vipin Patwa</h4>
+                <h4>Music Label:  T-series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id20" class="modal">
+              <span onclick="document.getElementById('id20').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id20').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images\daasdev.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                 Khwabon ki duniya mukambal kahan hai
+                Jeene ki khwaish mein marna yahan hai!!
+
+                Manzil yahi hai yahi karwaan hai
+                Jeene ki khwaish mein marna yahan hai!!
+
+                Sirr par uthaya hai kyun aasmaan ko
+                Agar badd hai jaati teri dhadkanein…!!
+
+                Sehmi hai dhadkan
+                Sihri hai dhadkan
+                Thehri hai dhadkan
+                Toh kya ho gaya (x2)
+
+                Purani kitaabon ke panne sabhi
+                Gawahi yahan dene aa jayenge
+                Khayalon mein yaadon ke aakar ujaale
+                Sabhi daag dil ke mitaa jayenge!!
+              </p>
+                <p>
+                Kisko fikar hai tumhari yahan par
+                Agar bad hai jaati teri dhadkanein…!!
+
+                Sehmi hai dhadkan
+                Sihri hai dhadkan
+                Thehri hai dhadkan
+                Toh kya ho gaya (x2)
+
+                Ohh…
+
+                Guzaiss jahaan se toh barsoon khafa hai
+                Ganimat hai tumse toh insaan hai rootha
+                Dariyaa ki tarah zamane ke aansu
+                Palkaon se teri katra hai chhoota!!
+
+                Sirr par uthaya hai kyun aasmaan ko
+                Agar badd hai jaati teri dhadkanein…!!
+
+                Sehmi hai dhadkan
+                Sihri hai dhadkan
+                Thehri hai dhadkan
+                Toh kya ho gaya (x2)
+              </p>
+              </span>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id21" class="modal">
+              <span onclick="document.getElementById('id21').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id21').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/padmavat.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Padmavat movie(2018)</h4>
+                <h4>File Size:    4.50 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Shreya Ghoshal, Swaroop Khan</h4>
+                <h4>Lyrics By:    A M Turaz</h4>
+                <h4>Music By:     Sanjay Leela Bhansali</h4>
+                <h4>Music Label:  T-series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id22" class="modal">
+              <span onclick="document.getElementById('id22').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id22').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/padmavat.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Palak buhaaru aangno
+                Raani sa padhraaye
+                Ghoomar ramwa re aap padharo saa…!!
+
+                Aavo ji aavo ji Ghoomardi khelba ne
+                Padharo sa Ghoomardi khelba ne
+                Balam tharo ghurar ghurar ghurraave
+                Aa so mharo jivdo ghano hichkaave
+                O ghabraave mann mein bhaave
+                Mharo badilo Bhanwar mann bhaave
+                Chamak cham baaje payal baaje
+                Baaisa khele…!!
+
+                Jhamak jhamak ghunghra baaje
+                Aao sa ghoomardi khelba ne
+                Aao sa ghoomardi khelba ne!!
+              </p>
+              <p>
+                Dhanak preet ki sar pe odh kar
+                Ghoomar ghoomar ghoome!!
+
+                Haan ghoomar ghoomar ghoome
+                O… ralak reet sab jag ki chhod kar
+                Ghoomar ghoomar ghoome bharke
+                Dhola waale thaath
+                Ghoomar ghoomar ghoomar ghoomar ghoomar ghoome re
+                Ghoomar ghoomar ghoome re baaisa
+                Ghoomar ghoome re!!
+
+                Ho.. mhaari saari kaaya bole
+                Dhola ji ki chhaaya hole
+                Mann ka ghoomar jab bhi dole
+                Soonepan mein mela bharke
+                Dhola waale thaath ghoomar
+                Ghoomar ghoomar ghoomar ghoomar ghoome re
+                Ghoomar ghoomar ghoome re BaaiSa
+                Ghoomar ghoome re!!
+                </p>
+                <p>
+                O.. aavo ji mhara piya ji…!!
+
+                Thaare ehsaason ki raunak hai mhari Diwali
+                Mann mahal ki saari deewaarein
+                Thaare rang rangwa li (x2)
+
+                Paake thara saaya tann hai jagmagaya
+                Taaron bhari ho gayi mhari saari kaali raat bharke
+                Dhola waale thaanth
+                Ghoomar ghoomar ghoomar ghoomar ghoomar ghoome re
+                Ghoomar ghoomar ghoome re BaiSa
+                Ghoomar ghoome re!!
+
+
+                Dhanak preet ki sar pe odh kar
+                Ghoomar ghoomar ghoome
+                Lalak reet sab jag ki chhod kar
+                Ghoomar ghoomar ghoome bharke
+                Dhola waale thaath
+                Ghoomar ghoomar ghoomar ghoomar ghoomar ghoome re
+                Ghoomar ghoomar ghoome re Baaisa
+                Ghoomar ghoome re!!
+                </p>
+                <p>
+                Aavo ji aavo ghoomar khelva aavo
+                Aapan saath saath ghooma sagla khelva aavo
+                Arey lehango kurti chunri payaliya thhe pehno
+                Oye loomar jhoomar ghoomar ghoomar thhe khelo!!
+
+                Devrani-Jethani khele
+                Saasu ji ghoomardi khele
+                Nanad-Bhojai khele
+                Baaisa ghoomardi khele!!
+
+                Ghoome re ghoome re ghoome
+                Ghoomar ghoomar ghoomar ghoome
+                Loome jhoome ghoome jhoome
+                Ghoomar ghoomar ghoome (x2)
+
+                Loomar ghoomar ghoomar ghoomar ghoomar
+                ghoomar ghoomar ghoome (x4)
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id23" class="modal">
+              <span onclick="document.getElementById('id23').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id23').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images\veereDiWedding.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Veerey Ki Wedding (2018)</h4>
+                <h4>File Size:    11.07 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Javed Ali</h4>
+                <h4>Lyrics By:    Faaiz Anwar</h4>
+                <h4>Music By:     Farzan Faaiz</h4>
+                <h4>Music Label:  T-series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id24" class="modal">
+              <span onclick="document.getElementById('id24').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id24').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/veereDiWedding.jpg">
+              </span>
+               <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Na kasoor dil ka hai
+                Na toh hai meri khata..!!
+
+                Na kasoor dil ka hai
+                Na toh hai meri khata
+                Tu pasand hai meri
+                Itna hi mujhe pata!!
+
+                Hona tha tujhse pyaar hua
+                Dil se mere iqraar hua!!
+
+                Hona tha tujhse pyaar hua
+                Dil se mere iqraar hua
+                Aashiq hoon bas main tera!!
+              </p>
+              <p>
+                Wohoo…
+
+                Itne hi chehre dekhe thhe maine
+                Tujhpe hi aaya yeh dil mera
+                Yeh ishq laaya iss raaste par
+                Jeena hua hai mushkil mera!!
+
+                Hona tha tujhse pyaar hua
+                Dil se mere iqraar hua!!
+
+                Hona tha tujhse pyaar hua
+                Dil se mere iqraar hua
+                Aashiq hoon bas main tera!!
+
+                I love you, I love you!
+                I love you, I love you!
+                </p>
+                <p>
+                Jo dil kahe wo de de sajaa tu
+                Galti pe apni sharminda ho
+                Aise hi tujhko chahunga pal pal
+                Jab tak meri jaan main zinda hoon!!
+
+                Hona tha tujhse pyaar hua
+                Dil se mere iqraar hua!!
+
+                Hona tha tujhse pyaar hua
+                Dil se mere iqraar hua
+                Aashiq hoon bas main tera!!
+
+                I love you, I love you
+                I love you, I love you (x2)
+
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id25" class="modal">
+              <span onclick="document.getElementById('id25').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id25').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images\wtn.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Welcome To New York (2018)</h4>
+                <h4>File Size:    4.23 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Boman Irani and Dhvani Bhanushali</h4>
+                <h4>Lyrics By:    Kumaar</h4>
+                <h4>Music By:     Kumaar</h4>
+                <h4>Music Label:  T-series</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id26" class="modal">
+              <span onclick="document.getElementById('id26').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id26').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/wtn.jpg">
+              </span>
+              <span id="spanright">
+           
+              <p> 
+                Yeah!! Simple si yeh baat hai Hasana toh jasbaat hai Na hasane me kar kanjusiyan Show me your big smiley, Simple si yeh baat he Hasana toh zasbaat he Na hasane me kar kanjoosiyan Show me your big smiley, hahahaha, hahahaha Show me your big smiley Hu haha..Hu haha, Ha ha ha ha, ha ha ha ha Ha ha ha ha, ha ha ha ha Ha ha ha ha, ha ha ha ha, Ha ha ha ha, ha ha ha ha Ha ha ha ha, ha ha ha ha Ha ha ha ha, ha ha ha ha!! </p><p> Show me your big smiley Haha hahaa.. Yeh baat, Yeh baat, Dheere se sharmaake Zor zor se chillaake Lot pot ke gud guda ke Show me your big smiley, Ha ha ha ha, ha ha ha ha Ha ha ha ha, ha ha ha Ha ha ha ha, ha ha ha Show me your big smiley, Haa.. hahaha… Haha.. hehe hehe.. Haha haa.. haha ha ha.. Jhakaas, Life long, life long Man o man I love this song, Life long, life long Man o man I love this song!!</p><p> Haha.. ha ha Ha ha ha. hahaha Ha ha ha, haa haa, Simple si yeh baat he Hasana toh jasbaat he Na hasane me kar kanjoosiyan Show me your big smiley, Come-on, come-on Show me your big smiley Show me your big smiley Everybody how me your big smiley Show me your big smiley, Man of man I love this song Everybody in the house Show me your big smiley…!!
+              </p>
+              </span>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id27" class="modal">
+              <span onclick="document.getElementById('id27').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id27').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/Aiyaary.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  Aiyaary (2018) </h4>
+                <h4>File Size:    7.05 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Palak Mucchal and Ankit Tiwari</h4>
+                <h4>Lyrics By:    Manoj Muntashir</h4>
+                <h4>Music By:     Arranged and Produced by DJ Phukan</h4>
+                <h4>Music Label:  Zee Music Company</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id28" class="modal">
+              <span onclick="document.getElementById('id28').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id28').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/Aiyaary.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                 Teri meri aankhon nai
+                Milke jo khwaab bune
+                Woh bade pyaare the!!
+
+                Tere mere paaon chale
+                Milke do pairon tale
+                Taare hi taare the!!
+
+                Saari baatein mujhe yaad hain
+                Wo chaand raatein mujhe yaad hain!!
+              </p>
+              <p>
+                Mujhe bhi tere haathon ki narmiyaan yaad hain..
+                Wo masoom pyaari si besharmiyaan yaad hain..!!
+
+                Yaad hai sab mujhe yaad hai
+                Saari baatein mujhe yaad hain (x2)
+
+                Yaad hai tumko wo barsaatein
+                Jab milke hum bheege the
+                Kyun andar se aj uthe jab
+                Bahar se hum geele the
+                Kaisi thi wo befikri
+                Gujree phir bhi na gujree!!
+
+                Aisi shaamein mujhe yaad hain
+                Aisi baatein mujhe yaad hain!!
+              </p>
+              <p>
+                Koi jaan ke jaan se toh guzarta nahi
+                Kabhi apni marzi se koi bichhadta nahi!!
+
+                Yaad hai sab mujhe yaad hai
+                Saari baatein mujhe yaad hain (x2)
+
+                Aa..
+
+                Kaandhe pe sir rakhke tere
+                Soyi thi main kitni der
+                Dhoond rahi thi duniya mujhko
+                Khoyi thi main kitni der
+                Kaisi thi wo befikri
+                Gujree phir bhi na gujree!!
+
+                Saari shaamein mujhe yaad hain
+                Saari baatein mujhe yaad hain!!
+                </p>
+                <p>
+                Jo honthon se na keh saka
+                Harf woh bhi to hai..
+                Jo aankhon se na beh saka
+                Dard woh bhi to hai..!!
+
+                Yaad hai sab mujhe yaad hai
+                Saari baatein mujhe yaad hain (x2)
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+
+<div id="id29" class="modal">
+              <span onclick="document.getElementById('id29').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id29').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Song Details</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/1921.jpg">
+              </span>
+              <span id="spanright">
+                <h4>Album/Movie:  1921 (2018)</h4>
+                <h4>File Size:    5.31 MB</h4>
+                <h4>File Type:    .mp3</h4>
+                <h4>Singer:       Arijit Singh and Aakansha Sharma</h4>
+                <h4>Lyrics By:    Raqueeb Alam</h4>
+                <h4>Music By:     Asad Khan</h4>
+                <h4>Music Label:  Zee Music Company</h4>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <div id="id30" class="modal">
+              <span onclick="document.getElementById('id30').style.display='none'" class="close" title="Close Modal"></span>
+              <form class="modal-content">
+              <div class="container">
+              <div class="clearfix">
+              <button type="button" style="float: right;"  onclick="document.getElementById('id30').style.display='none'"  style= "background-color: #f44336;" "width: 5%;">X</button>
+              <!-- <button type="button"   onclick="validateField()" style= "background-color: green;" "width: 5%;">Sign Up</button> -->
+              <div style="color: #333; width: 90%">
+                <h3>Lyrics of Song</h3>
+                <br>
+              <span id="spanleft">
+                <img id="songicon" src="Images/1921.jpg">
+              </span>
+              <span id="spanright">
+              <!-- <h3>Aaj Se Teri</h3> -->
+              <p> 
+                Tere Bina marz aadha adhoora hai
+                Ek dhund hai sham hai na sawera hai
+                Tanha hoon main phir bhi tanha nahi
+                Darr ye hai ki fanaah ho na jaau!!
+
+                Aaja naa..
+                Nigaaho se ilzaam de
+                Adoon se paigaam de..
+                Koi toh Mujhe naam de
+                Ishq hai badgumaan (x2)
+
+                Tu nadi ka kinaara
+                Gumnaam saa main hoon safeena!!
+
+                Tu hai mausam bahaara
+                Sookhi sookhi main heena
+                Jaan meri hai phasi ek mulaaqat mein!!
+              </p>
+              <p>
+                Kaise main ab jiyoon
+                Aise halaat main
+                Sar pe gham ka hai jo aasmaan!!
+
+                Tere Bina marz aadha adhoora hai
+                Ek dhund hai sham hai na sawera hai
+                Tanha hoon main phir bhi tanha nahi
+                Darr ye hai ki fanaah ho na jaau!!
+
+                Besawar ho rhi hai ye meri baahein
+                Tu kahan hai
+                Benazar ho rahi hai ye nigaahein
+                Tu kahan hai!!
+                </p>
+                <p>
+                Apne dil se mera haq mitaane lage
+                Mere har khwaab ko tum jalaane lage
+                Dil main bharne laga hai dhuaan…!!
+
+                Tere Bina marz aadha adhoora hai
+                Ek dhund hai sham hai na sawera hai
+                Tanha hoon main phir bhi tanha nahi
+                Darr ye hai ki fanaah ho na jaau!!
+
+                Aaja naa..
+                Nigaaho se ilzaam de
+                Adaoo se pegaam de..
+                Koi toh Mujhe naam de
+                Ishq hai badgumaan!!
+              </p>
+              </span>
+              </div>
+              </div>
+              </div>
+              </form>
+              </div>
+              <!-- Added by shubhi-->
+   <script src="SimpleStarRating.js"></script>
+        <script>
+            var ratings = document.getElementsByClassName('rating');
+
+            for (var i = 0; i < ratings.length; i++) {
+                var r = new SimpleStarRating(ratings[i]);
+
+                ratings[i].addEventListener('rate', function(e) {
+                    console.log('Rating: ' + e.detail);
+                });
+            }
+        </script>
+	<script src="multilineCar.js"></script>
+  <br>
+  <br>
+  <br>
+
+  <footer>
+  Copyright &copy; 2017 Flixon. All rights reserved<br>
+  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=flixonmovies@gmail.com" target="_blank">flixonmovies@gmail.com</a>
+  <br>
+  <br>
+  <a href="terms&conditions.html" target="_blank">***Terms & Conditions***</a>
+  </footer>
+        <!--Footer ends here-->
+
+</body>
+</html>
